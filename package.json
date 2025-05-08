@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "type": "module",
   "description": "A news aggregator plugin for Siyuan Note, inspired by newsnow.busiyi.world.",
-  "author": "YourName",
+  "author": "lnedpaul",
   "license": "MIT",
-  "homepage": "https://github.com/your-username/siyuan-plug-newsnow",
+  "homepage": "https://github.com/lnedpaul/siyuan-plug-newsnow",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/your-username/siyuan-plug-newsnow.git"
+    "url": "git+https://github.com/lnedpaul/siyuan-plug-newsnow.git"
   },
   "scripts": {
     "dev": "npx --yes vite",

@@ -2,63 +2,53 @@
 import { defineStore } from 'pinia';
 
 /**
- * Defines the news store for managing news-related state.
+ * @file newsStore.ts - 管理新闻数据的状态。
  */
+
 export const useNewsStore = defineStore('news', {
   state: () => ({
-    newsList: [] as any[], // Define a more specific type later
+    articles: [],
     isLoading: false,
-    error: null as string | null,
+    error: null,
+    newsSources: [
+      // 默认新闻源列表
+      'https://rsshub.app/bbc/topics/chinese', // BBC中文网
+      'https://rsshub.app/reuters/world/china', // 路透社中国新闻
+      'https://rsshub.app/zaobao/realtime/china', // 联合早报中国新闻
+      'https://rsshub.app/thepaper/featured', // 澎湃新闻
+      'https://rsshub.app/guokr/scientific', // 果壳科学
+      'https://rsshub.app/36kr/newsflashes', // 36氪快讯
+      'https://rsshub.app/zhihu/daily', // 知乎日报
+    ]
   }),
-  getters: {
-    /**
-     * Gets the current list of news articles.
-     * @param {object} state - The current state.
-     * @returns {any[]} The list of news articles.
-     */
-    getNewsList: (state) => state.newsList,
-    /**
-     * Checks if news data is currently being loaded.
-     * @param {object} state - The current state.
-     * @returns {boolean} True if loading, false otherwise.
-     */
-    getIsLoading: (state) => state.isLoading,
-    /**
-     * Gets the current error message, if any.
-     * @param {object} state - The current state.
-     * @returns {string | null} The error message or null.
-     */
-    getError: (state) => state.error,
-  },
   actions: {
-    /**
-     * Fetches news articles from the service and updates the state.
-     */
-    async fetchNews() {
+    async loadNews() {
       this.isLoading = true;
-      this.error = null;
       try {
-        // const newsService = await import('@/services/newsService'); // Example of dynamic import
-        // this.newsList = await newsService.fetchNews();
-        // Placeholder for now:
-        this.newsList = [
-          { id: 1, title: '示例新闻1', source: '来源A', date: '2023-10-27' },
-          { id: 2, title: '示例新闻2', source: '来源B', date: '2023-10-28' },
-        ];
-        console.log('News fetched (mocked):', this.newsList);
-      } catch (err: any) {
-        this.error = err.message || 'Failed to fetch news';
-        console.error(this.error);
+        // 添加模拟数据确保组件能渲染
+        this.articles = [{
+          id: '1',
+          title: '测试新闻标题',
+          source: '测试来源',
+          publishedAt: new Date().toISOString(),
+          url: '#',
+          summary: '这是测试新闻摘要'
+        }];
+      } catch (err) {
+        this.error = err.message;
       } finally {
         this.isLoading = false;
       }
     },
-    /**
-     * Adds a news item to the list (example action).
-     * @param {any} newsItem - The news item to add.
-     */
-    addNewsItem(newsItem: any) {
-      this.newsList.push(newsItem);
-    },
+    addNewsSource(url) {
+      if (!this.newsSources.includes(url)) {
+        this.newsSources.push(url);
+      }
+    }
   },
+  getters: {
+    getArticles: (state) => state.articles,
+    getIsLoading: (state) => state.isLoading,
+    getError: (state) => state.error
+  }
 });

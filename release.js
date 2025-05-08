@@ -157,9 +157,16 @@ const main = async () => {
     writeFileSync('./package.json', packageUpdated, 'utf8')
     console.log('✅  package.json updated')
 
+    console.log('🔄  \x1B[90mUpdating CHANGELOG.md...\x1B[0m')
+    const changelogContent = `# 更新日志\n\n## [${newVersion}] - ${new Date().toISOString().split('T')[0]}\n\n### 新增\n\n### 修复\n\n### 变更\n\n`
+    const existingChangelog = readFileSync('./CHANGELOG.md', 'utf8')
+    const updatedChangelog = changelogContent + existingChangelog.replace('# 更新日志\n', '')
+    writeFileSync('./CHANGELOG.md', updatedChangelog, 'utf8')
+    console.log('✅  CHANGELOG.md updated')
+
     console.log('🔄  \x1B[90m Ready to commit new version and create tag...\x1B[0m')
     exec(
-      `git add ./plugin.json ./package.json && git commit -m "chore: update version to ${newVersion}" && git push && git tag v${newVersion}`,
+      `git add ./plugin.json ./package.json ./CHANGELOG.md && git commit -m "chore: update version to ${newVersion}" && git push && git tag v${newVersion}`,
       (err, stdout) => {
         if (err) {
           console.error('\x1B[31m%s\x1B[0m', '❌  Error for adding and committing:', err)
