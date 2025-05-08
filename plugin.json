@@ -1,0 +1,39 @@
+{
+  "name": "siyuan-plug-newsnow",
+  "author": "YourName",
+  "url": "https://github.com/your-username/siyuan-plug-newsnow",
+  "version": "0.1.0",
+  "minAppVersion": "2.10.14",
+  "backends": [
+    "all"
+  ],
+  "frontends": [
+    "all"
+  ],
+  "displayName": {
+    "default": "zh_CN",
+    "en_US": "Siyuan Note News Plugin",
+    "zh_CN": "思源笔记新闻插件"
+  },
+  "description": {
+    "default": "zh_CN",
+    "en_US": "A news aggregator plugin for Siyuan Note, inspired by newsnow.busiyi.world.",
+    "zh_CN": "思源笔记新闻插件 - 一个为思源笔记开发的新闻聚合器，灵感来源于 newsnow.busiyi.world。"
+  },
+  "readme": {
+    "default": "zh_CN",
+    "en_US": "README.md",
+    "zh_CN": "README_zh_CN.md"
+  },
+  "funding": {
+    "custom": []
+  },
+  "keywords": [
+    "news",
+    "aggregator",
+    "siyuan",
+    "plugin"
+  ],
+  "icon": "icon.png",
+  "preview": "preview.png"
+}
