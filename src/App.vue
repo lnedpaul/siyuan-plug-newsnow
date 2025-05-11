@@ -1,43 +1,60 @@
 <template>
-  <MainPanel />
+  <div id="siyuan-news-plugin-main-container" class="siyuan-news-plugin-app">
+    <component :is="currentView" @show-settings="showSettingsView" @back="showMainView" />
+  </div>
 </template>
 
 <script lang="ts" setup>
-import MainPanel from './views/MainPanel.vue';
+import { ref, computed, shallowRef } from 'vue';
+import MainPanel from '@/views/MainPanel.vue';
+import SettingsPanel from '@/views/SettingsPanel.vue';
+
+// Function-level comment: This script block is the setup function for App.vue.
+// It manages the current view (MainPanel or SettingsPanel) and handles view switching.
+
+// shallowRef is used for components to optimize performance, as the component instances themselves don't need deep reactivity.
+const currentViewComponent = shallowRef(MainPanel);
+
+/**
+ * @description: Computed property to get the current view component.
+ */
+const currentView = computed(() => currentViewComponent.value);
+
+/**
+ * @description: Switches the view to the SettingsPanel.
+ */
+const showSettingsView = () => {
+  currentViewComponent.value = SettingsPanel;
+  console.log('SiyuanNewsPlugin: Switched to SettingsPanel view.');
+};
+
+/**
+ * @description: Switches the view back to the MainPanel.
+ */
+const showMainView = () => {
+  currentViewComponent.value = MainPanel;
+  console.log('SiyuanNewsPlugin: Switched to MainPanel view.');
+};
+
+console.log('SiyuanNewsPlugin: App.vue setup executed, view management initialized.');
 </script>
 
-<!-- 局部样式 -->
-<style lang="scss" scoped>
-/* 局部样式内容 */
-</style>
-
-<!-- 全局样式 --> 
-<style lang="scss">
-.plugin-sample-vite-vue-app {
-  width: 100vw;
-  height: 100dvh;
-  max-height: 100vh;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  box-sizing: border-box;
-}
-
-.plugin-app-main {
-  pointer-events: auto; /* 修改为允许交互 */
-}
-
-.row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-}
-
-.col {
+<style scoped>
+.siyuan-news-plugin-app {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 8px;
+  /* Basic styling, will be enhanced with Siyuan CSS variables for theme consistency */
+  background-color: var(--b3-theme-background, #ffffff); /* Default to white if Siyuan var not found */
+  color: var(--b3-theme-on-background, #000000); /* Default to black */
+  overflow: hidden; /* Prevent scrollbars on the app root, manage scrolling within components */
+}
+
+/* Ensure the container fills the dialog space */
+#siyuan-news-plugin-main-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 </style>

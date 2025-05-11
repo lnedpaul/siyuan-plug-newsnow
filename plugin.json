@@ -34,6 +34,60 @@
     "siyuan",
     "plugin"
   ],
+  "i18n": {
+    "settingsTitle": {
+      "en_US": "Plugin Settings",
+      "zh_CN": "插件设置"
+    },
+    "settingsDescription": {
+      "en_US": "Configure news sources and other options here.",
+      "zh_CN": "在这里配置新闻源和其他选项。"
+    },
+    "backButton": {
+      "en_US": "Back to News List",
+      "zh_CN": "返回新闻列表"
+    },
+    "manageNewsSourcesTitle": {
+      "en_US": "Manage News Sources",
+      "zh_CN": "管理新闻源"
+    },
+    "noNewsSources": {
+      "en_US": "No news sources configured.",
+      "zh_CN": "暂无新闻源。"
+    },
+    "addSourcePlaceholder": {
+      "en_US": "Enter new news source URL",
+      "zh_CN": "输入新的新闻源 URL"
+    },
+    "addButton": {
+      "en_US": "Add",
+      "zh_CN": "添加"
+    },
+    "editButton": {
+      "en_US": "Edit",
+      "zh_CN": "修改"
+    },
+    "deleteButton": {
+      "en_US": "Delete",
+      "zh_CN": "删除"
+    },
+    "editSourcePrompt": {
+      "en_US": "Edit news source",
+      "zh_CN": "修改新闻源"
+    },
+    "deleteSourceConfirm": {
+      "en_US": "Are you sure you want to delete the news source",
+      "zh_CN": "确定要删除新闻源"
+    },
+    "newsTitle": {
+        "en_US": "News",
+        "zh_CN": "新闻"
+    },
+    "settingsButtonTooltip": {
+        "en_US": "Settings",
+        "zh_CN": "设置"
+    }
+  },
   "icon": "icon.png",
   "preview": "preview.png"
 }

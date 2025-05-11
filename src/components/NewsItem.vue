@@ -50,60 +50,78 @@ const addToNotes = () => {
 
 <style scoped>
 .news-item {
-  border: 1px solid #ddd;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 4px;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--b3-border-color-translucent, #e0e0e0);
+  padding: 12px 15px;
+  /* margin-bottom is handled by gap in NewsList.vue */
+  border-radius: 6px;
+  background-color: var(--b3-theme-surface, #fff);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.news-item:hover {
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
 }
 
 .news-title {
-  font-size: 1.25rem;
+  font-size: 1.1em; /* Slightly smaller for consistency */
   margin-top: 0;
-  margin-bottom: 0.5rem;
-  color: #333;
+  margin-bottom: 6px;
+  color: var(--b3-theme-on-surface, #2c3e50);
+  font-weight: 500;
 }
 
 .news-meta {
-  font-size: 0.875rem;
-  color: #666;
-  margin-bottom: 0.75rem;
+  font-size: 0.85em;
+  color: var(--b3-theme-on-surface-light, #757575);
+  margin-bottom: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .news-source {
-  margin-right: 1rem;
+  /* margin-right is handled by gap in .news-meta */
 }
 
 .news-summary {
-  font-size: 1rem;
-  color: #444;
-  line-height: 1.6;
-  margin-bottom: 1rem;
+  font-size: 0.9em;
+  color: var(--b3-theme-on-background, #444);
+  line-height: 1.55;
+  margin-bottom: 12px;
+  /* Basic text truncation for long summaries */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .news-link {
-  color: #007bff;
+  color: var(--b3-theme-primary, #007bff);
   text-decoration: none;
-  margin-right: 1rem;
+  font-size: 0.85em;
+  margin-right: 12px;
+  transition: color 0.2s ease;
 }
 
 .news-link:hover {
   text-decoration: underline;
+  color: var(--b3-theme-primary-dark, #0056b3);
 }
 
 .add-to-notes-button {
-  padding: 0.5rem 1rem;
-  background-color: #28a745;
-  color: white;
+  padding: 6px 12px;
+  background-color: var(--b3-theme-primary-light, #4CAF50); /* Using a green shade */
+  color: var(--b3-theme-on-primary, white);
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 0.9rem;
-  transition: background-color 0.3s ease;
+  font-size: 0.85em;
+  transition: background-color 0.2s ease;
 }
 
 .add-to-notes-button:hover {
-  background-color: #218838;
+  background-color: var(--b3-theme-primary-dark, #388E3C); /* Darker green */
 }
 </style>

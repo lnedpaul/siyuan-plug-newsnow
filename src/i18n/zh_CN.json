@@ -1,3 +1,27 @@
 {
-  "addTopBarIcon": "PluginSampleViteVue"
+    "pluginName": "思源笔记新闻插件",
+    "helloWorld": "你好，世界！",
+    "addTopBarIcon": "添加顶栏图标",
+    "addDock": "添加Dock",
+    "removeDock": "移除Dock",
+    "showDialog": "展示对话框",
+    "removed": "已移除",
+    "added": "已添加",
+    "newsSourceManagement": "新闻源管理",
+    "addNewsSource": "添加新闻源",
+    "newsSourceUrl": "新闻源 URL",
+    "add": "添加",
+    "cancel": "取消",
+    "refreshNews": "刷新新闻",
+    "loadingNews": "正在加载新闻...",
+    "noNewsAvailable": "暂无新闻。",
+    "errorLoadingNews": "加载新闻时出错。",
+    "confirmRemoveSource": "确定要移除此新闻源吗？",
+    "remove": "移除",
+    "saveToNote": "保存到笔记",
+    "settingsTitle": "插件设置",
+    "settingsDescription": "在这里配置新闻源和其他选项。",
+    "backButton": "返回新闻列表",
+    "newsTitle": "新闻",
+    "settingsButtonTooltip": "设置"
 }

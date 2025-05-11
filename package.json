@@ -11,7 +11,7 @@
     "url": "git+https://github.com/lnedpaul/siyuan-plug-newsnow.git"
   },
   "scripts": {
-    "dev": "npx --yes vite",
+    "dev": "npx --yes vite serve",
     "release": "node ./release.js",
     "release:manual": "node ./release.js --mode=manual",
     "release:patch": "node ./release.js --mode=patch",
