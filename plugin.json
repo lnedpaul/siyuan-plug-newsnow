@@ -1,93 +1,44 @@
 {
-  "name": "siyuan-plug-newsnow",
-  "author": "YourName",
-  "url": "https://github.com/your-username/siyuan-plug-newsnow",
-  "version": "0.1.0",
-  "minAppVersion": "2.10.14",
+  "name": "newsnow",
+  "author": "lnedpaul",
+  "url": "https://github.com/lnedpaul/siyuan-plug-newsnow",
+  "version": "0.3.0",
+  "minAppVersion": "3.1.27",
   "backends": [
-    "all"
+    "windows",
+    "linux",
+    "darwin",
+    "android",
+    "ios",
+    "docker"
   ],
   "frontends": [
-    "all"
+    "desktop",
+    "browser-desktop",
+    "mobile",
+    "browser-mobile"
   ],
   "displayName": {
-    "default": "zh_CN",
-    "en_US": "Siyuan Note News Plugin",
-    "zh_CN": "思源笔记新闻插件"
+    "default": "NewsNow",
+    "en_US": "NewsNow",
+    "zh_CN": "新闻聚合"
   },
   "description": {
-    "default": "zh_CN",
-    "en_US": "A news aggregator plugin for Siyuan Note, inspired by newsnow.busiyi.world.",
-    "zh_CN": "思源笔记新闻插件 - 一个为思源笔记开发的新闻聚合器，灵感来源于 newsnow.busiyi.world。"
+    "default": "Browse and save news in SiYuan Note.",
+    "en_US": "Browse and save news in SiYuan Note.",
+    "zh_CN": "在思源笔记中浏览和保存新闻。"
   },
   "readme": {
-    "default": "zh_CN",
-    "en_US": "README.md",
-    "zh_CN": "README_zh_CN.md"
-  },
-  "funding": {
-    "custom": []
-  },
-  "keywords": [
-    "news",
-    "aggregator",
-    "siyuan",
-    "plugin"
-  ],
-  "i18n": {
-    "settingsTitle": {
-      "en_US": "Plugin Settings",
-      "zh_CN": "插件设置"
-    },
-    "settingsDescription": {
-      "en_US": "Configure news sources and other options here.",
-      "zh_CN": "在这里配置新闻源和其他选项。"
-    },
-    "backButton": {
-      "en_US": "Back to News List",
-      "zh_CN": "返回新闻列表"
-    },
-    "manageNewsSourcesTitle": {
-      "en_US": "Manage News Sources",
-      "zh_CN": "管理新闻源"
-    },
-    "noNewsSources": {
-      "en_US": "No news sources configured.",
-      "zh_CN": "暂无新闻源。"
-    },
-    "addSourcePlaceholder": {
-      "en_US": "Enter new news source URL",
-      "zh_CN": "输入新的新闻源 URL"
-    },
-    "addButton": {
-      "en_US": "Add",
-      "zh_CN": "添加"
-    },
-    "editButton": {
-      "en_US": "Edit",
-      "zh_CN": "修改"
-    },
-    "deleteButton": {
-      "en_US": "Delete",
-      "zh_CN": "删除"
-    },
-    "editSourcePrompt": {
-      "en_US": "Edit news source",
-      "zh_CN": "修改新闻源"
-    },
-    "deleteSourceConfirm": {
-      "en_US": "Are you sure you want to delete the news source",
-      "zh_CN": "确定要删除新闻源"
-    },
-    "newsTitle": {
-        "en_US": "News",
-        "zh_CN": "新闻"
-    },
-    "settingsButtonTooltip": {
-        "en_US": "Settings",
-        "zh_CN": "设置"
-    }
+    "default": "README.md",
+    "zh_CN": "README.md"
   },
   "icon": "icon.png",
-  "preview": "preview.png"
+  "main": "dist/index.js",
+  "settings": {
+    "custom": true
+  },
+  "i18n": [
+    "en_US",
+    "zh_CN"
+  ]
 }

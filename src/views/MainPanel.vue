@@ -1,101 +1,166 @@
 <template>
-  <div class="main-panel">
-    <div class="panel-header">
-      <h2 class="panel-title">{{ i18n.newsTitle || '新闻列表' }}</h2>
-      <button @click="goToSettings" class="settings-button" :title="i18n.settingsButtonTooltip || '打开设置'">
-        <!-- 使用思源笔记内置图标或SVG图标 -->
-        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path d="M904 512c0 9.6-0.6 19.1-1.9 28.5l-47.8-27.6c2.3-9.4 3.6-19.1 3.6-29 0-107.7-87.4-195.1-195.1-195.1S467.7 404.3 467.7 512c0 9.9 1.3 19.6 3.6 29l-47.8 27.6A249.5 249.5 0 0 1 421.6 512c0-137.6 111.8-249.4 249.4-249.4s249.4 111.8 249.4 249.4zM708.9 658.1l47.8 27.6c-12.9 33.2-31.8 63.4-55.8 89.8l-39.6-22.8c19.8-22.1 36.1-47.8 47.6-74.6zM512 708.9c9.9 0 19.6-1.3 29-3.6l27.6 47.8A249.5 249.5 0 0 1 512 761.3c-107.7 0-195.1-87.4-195.1-195.1s87.4-195.1 195.1-195.1c9.9 0 19.6 1.3 29 3.6l27.6-47.8A249.5 249.5 0 0 0 512 262.7C374.4 262.7 262.6 374.5 262.6 512S374.4 761.3 512 761.3zm0-421.6c-9.6 0-19.1 0.6-28.5 1.9l-27.6-47.8c33.2-12.9 63.4-31.8 89.8-55.8l22.8 39.6C547.8 244.9 522.1 261.2 512 287.3zM315.1 365.9l-47.8-27.6c12.9-33.2 31.8-63.4 55.8-89.8l39.6 22.8C342.9 293.4 326.6 319.1 315.1 346zm0 280.2l-47.8 27.6C280.2 706.9 299.1 737.1 323.1 763.5l39.6-22.8c-19.8-22.1-36.1-47.8-47.6-74.6zM512 904c-9.6 0-19.1-0.6-28.5-1.9l-27.6 47.8c33.2 12.9 63.4 31.8 89.8 55.8l22.8-39.6c-22.1-19.8-47.8-36.1-74.6-47.6A195.93 195.93 0 0 1 512 904zm225.4-146.7l39.6 22.8c24-26.4 42.9-56.6 55.8-89.8l-47.8-27.6c-11.5 26.8-27.8 52.5-47.6 74.6z"></path></svg>
-      </button>
+  <div class="main-panel-container">
+    <!-- 标题可以根据需要保留或移除，因为 Dialog 可能已经有标题了 -->
+    <!-- <h3 class="panel-title">NewsNow插件</h3> -->
+
+    <div class="content-area">
+      <!-- 这里是 MainPanel 显示新闻列表等内容的地方 -->
+      <!-- TODO: 替换为实际的新闻列表组件或内容 -->
+      <p v-if="isLoading">正在加载新闻...</p>
+      <p v-else-if="newsItems.length === 0">暂无新闻数据，请检查新闻源设置或点击刷新。</p>
+      <div v-else class="news-list">
+        <!-- 示例新闻条目渲染 -->
+        <div v-for="item in newsItems" :key="item.id" class="news-item">
+          <h4>{{ item.title }}</h4>
+          <p>{{ item.snippet }}</p>
+        </div>
+      </div>
     </div>
-    <NewsList />
+
+    <div class="actions-footer">
+      <button @click="openSettingsDialog" class="btn-action btn-settings">新闻源设置</button>
+      <button @click="refreshNewsData" class="btn-action btn-refresh">刷新新闻</button>
+    </div>
   </div>
 </template>
 
-<script lang="ts" setup>
-import NewsList from '@/components/NewsList.vue';
-import { usePlugin } from '@/main';
-import { computed } from 'vue';
+<script setup lang="ts">
+import { ref, inject, onMounted } from 'vue';
+import type NewsNowPlugin from '@/main'; // 确保路径相对于 MainPanel.vue
+// import { useNewsStore } from '@/store/newsStore'; // 如果需要从store获取新闻
 
-// Function-level comment: Defines the emits for the MainPanel component.
-// 'show-settings' is emitted to request a view switch to the settings panel.
-const emit = defineEmits(['show-settings']);
+const plugin = inject<NewsNowPlugin>('plugin');
+// const store = useNewsStore(); // 如果使用 Pinia store
 
-// Function-level comment: Accesses the plugin instance for i18n.
-const plugin = usePlugin();
+const isLoading = ref(false);
+const newsItems = ref<Array<{id: string, title: string, snippet: string}>>([]); // 简单示例
 
-// Function-level comment: Provides localized strings for the main panel.
-const i18n = computed(() => {
-  return {
-    newsTitle: plugin.i18n.newsTitle || '新闻',
-    settingsButtonTooltip: plugin.i18n.settingsButtonTooltip || '设置',
-  };
-});
-
-/**
- * @description: Emits an event to navigate to the settings view.
- */
-const goToSettings = () => {
-  emit('show-settings');
-  console.log('SiyuanNewsPlugin: goToSettings called, emitting show-settings.');
+const openSettingsDialog = () => {
+  if (plugin) {
+    plugin.openSetting();
+  } else {
+    console.error("NewsNow插件：插件实例未注入，无法打开设置。");
+  }
 };
 
-console.log('SiyuanNewsPlugin: MainPanel.vue setup executed.');
+const refreshNewsData = async () => {
+  console.log("NewsNow插件：刷新新闻被点击");
+  isLoading.value = true;
+  // TODO: 实现实际的新闻获取逻辑
+  // 例如: newsItems.value = await plugin.fetchNews(); 或 await store.fetchAllNews();
+  // 示例延迟
+  setTimeout(() => {
+    // 假设这是获取到的新闻数据
+    // newsItems.value = [
+    //   { id: '1', title: '示例新闻标题1', snippet: '这是第一条新闻的摘要...' },
+    //   { id: '2', title: '示例新闻标题2', snippet: '这是第二条新闻的摘要...' },
+    // ];
+    newsItems.value = []; // 默认清空，除非您实现了获取逻辑
+    isLoading.value = false;
+  }, 1500);
+};
+
+onMounted(() => {
+  // 首次加载时可以尝试刷新一次新闻
+  // refreshNewsData();
+});
+
 </script>
 
 <style scoped>
-.main-panel {
-  width: 100%;
-  height: 100%;
+.main-panel-container {
   display: flex;
   flex-direction: column;
-  background-color: var(--b3-theme-background, #fdfdfd);
-  color: var(--b3-theme-on-background, #333);
+  height: 100%; /* 占满父容器（Dialog content）的高度 */
+  padding: 15px;
   box-sizing: border-box;
-  overflow: hidden;
+  background-color: var(--b3-theme-background);
+  color: var(--b3-theme-on-background);
 }
 
-.panel-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 20px;
-  border-bottom: 1px solid var(--b3-border-color, #e0e0e0);
-  background-color: var(--b3-theme-surface, #fff);
-  flex-shrink: 0; /* Prevent header from shrinking */
+/* .panel-title {
+  font-size: 16px;
+  color: var(--b3-theme-on-background);
+  margin-bottom: 15px;
+  text-align: center;
+} */
+
+.content-area {
+  flex-grow: 1; /* 内容区域占据剩余空间 */
+  overflow-y: auto; /* 内容过多时滚动 */
+  margin-bottom: 15px; /* 与底部按钮的间距 */
 }
 
-.panel-title {
+.content-area p {
+  text-align: center;
+  margin-top: 20px;
+  color: var(--b3-theme-on-surface);
+}
+
+.news-list {
+  /* 简单的新闻列表样式 */
+}
+
+.news-item {
+  padding: 10px;
+  border-bottom: 1px solid var(--b3-border-color);
+}
+.news-item:last-child {
+  border-bottom: none;
+}
+.news-item h4 {
+  margin: 0 0 5px 0;
+  font-size: 1em;
+  color: var(--b3-theme-primary);
+}
+.news-item p {
+  font-size: 0.9em;
   margin: 0;
-  font-size: 1.1em; /* Slightly smaller for a cleaner look */
-  font-weight: 600; /* Bolder title */
-  color: var(--b3-theme-on-surface, #2c3e50);
+  text-align: left;
 }
 
-.settings-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 8px;
-  border-radius: 4px;
+
+.actions-footer {
   display: flex;
+  justify-content: space-between; /* 按钮分布在两侧 */
   align-items: center;
-  justify-content: center;
+  padding-top: 10px;
+  border-top: 1px solid var(--b3-border-color);
+  flex-shrink: 0; /* 防止底部栏在内容不足时收缩 */
 }
 
-.settings-button svg {
-  fill: var(--b3-theme-on-surface, #555);
-  width: 18px; /* Adjust icon size */
-  height: 18px;
+.actions-footer .btn-action {
+  padding: 8px 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s, box-shadow 0.2s, transform 0.1s;
 }
 
-.settings-button:hover {
-  background-color: var(--b3-theme-surface-lighter, #f0f0f0);
+.actions-footer .btn-settings {
+  background-color: var(--b3-theme-surface-light);
+  color: var(--b3-theme-on-surface);
+  border: 1px solid var(--b3-border-color);
+}
+.actions-footer .btn-settings:hover {
+  background-color: var(--b3-theme-surface);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.actions-footer .btn-settings:active {
+  transform: translateY(1px);
 }
 
-/* Ensure NewsList takes remaining space and is scrollable */
-:deep(.news-list) { /* Target .news-list directly as it's the root of NewsList.vue */
-  flex-grow: 1;
-  overflow-y: auto;
-  /* Padding will be handled within NewsList.vue for better control */
+.actions-footer .btn-refresh {
+  background-color: var(--b3-theme-primary);
+  color: var(--b3-theme-on-primary);
+}
+.actions-footer .btn-refresh:hover {
+  background-color: var(--b3-theme-primary-light); /* 或使用 color-mix 调暗/亮 */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.actions-footer .btn-refresh:active {
+  transform: translateY(1px);
 }
 </style>

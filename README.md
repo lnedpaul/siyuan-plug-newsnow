@@ -1,80 +1,75 @@
-# Siyuan Note News Plugin - siyuan-plug-newsnow
+# 思源笔记新闻聚合插件
 
-[简体中文](./README_zh_CN.md)
+## 项目概述
 
-A news aggregator plugin for Siyuan Note, inspired by [NewsNow](https://newsnow.busiyi.world/). This plugin aims to provide a seamless experience for browsing news and saving content directly into Siyuan Note.
+本插件为思源笔记提供新闻聚合功能，支持从多个新闻源获取数据并一键保存为笔记。
 
-This plugin allows users to:
-- Browse real-time news from multiple configurable sources directly within Siyuan Note.
-- Save interesting news (title, link, summary, etc.) as new Siyuan notes with a single click.
-- Customize news sources and configure note saving options (e.g., target notebook, template).
+## 技术栈
 
-## Features
+- Vue 3 (Composition API)
+- Vite
+- Pinia
+- TypeScript
 
-- **News Browsing**: Browse real-time news from multiple configurable sources directly within Siyuan Note. The news list updates in real-time or near real-time, displaying titles, sources, and publication times.
-- **One-click Save to Note**: Easily save interesting news articles (including title, original link, summary, and potentially parts of the content) as new notes in Siyuan Note.
-- **Customization**: 
-    - Select and manage preferred news sources.
-    - Configure default save locations and formats for new notes (e.g., specific notebook, note template).
-- **User-Friendly Interface**: A clean, intuitive interface that integrates smoothly with the Siyuan Note environment, inspired by the usability of NewsNow.
+## 项目结构
 
-## Prerequisites
+```
+.siyuan-plug-newsnow/
+├── src/
+│   ├── components/     # Vue组件(NewsItem, NewsList等)
+│   ├── services/       # API服务(newsApi, newsService)
+│   ├── store/          # Pinia状态管理(newsStore)
+│   ├── types/          # 类型定义
+│   ├── views/          # 页面级组件(MainPanel)
+│   ├── App.vue         # 根组件
+│   └── main.ts         # 应用入口
+├── server/             # 服务端代码
+│   ├── api/            # API路由
+│   └── database/       # 数据库相关
+├── .eslintrc.cjs       # ESLint配置
+├── .prettierrc.json    # Prettier配置
+├── package.json        # 项目配置
+├── plugin.json         # 插件配置
+├── README.md           # 项目说明
+├── tsconfig.json       # TypeScript配置
+└── vite.config.ts      # Vite配置
+```
 
-- [Node.js](https://nodejs.org/en/download) (v18+ recommended)
-- [pnpm](https://pnpm.io/installation)
-- SiYuan Note (v2.10.14+ recommended, check `plugin.json` for `minAppVersion`)
+## 开发流程
 
-## Technology Stack
+### 核心功能开发
+1. 新闻浏览功能
+   - 实现新闻列表展示(已完成NewsList组件)
+   - 支持新闻源切换(通过newsStore管理)
+   - 实现新闻详情查看(待开发)
 
-- **Framework**: Vue.js 3 (Composition API)
-- **Build Tool**: Vite
-- **Language**: TypeScript
-- **State Management**: Pinia
-- **HTTP Client**: Axios or Fetch API
-- **UI Library**: (To be determined, considering Element Plus or Ant Design Vue)
-- **Linting/Formatting**: ESLint, Prettier
+2. 笔记保存功能
+   - 实现一键保存为笔记(通过思源API)
+   - 支持笔记模板配置(待开发)
 
-## Installation
+3. API服务
+   - 新闻数据获取(newsService.ts)
+   - 数据缓存处理(server/database/cache.ts)
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/your-username/siyuan-plug-newsnow.git
-   ```
-2. Install dependencies:
-   ```bash
-   pnpm install
-   ```
-3. Copy `.env.example` to `.env` and set your SiYuan workspace path:
-   ```bash
-   cp .env.example .env
-   ```
+### 优化与测试
+1. UI优化
+   - 适配思源笔记主题
+   - 响应式布局
+2. 性能优化
+   - 新闻数据缓存
+   - 懒加载
+3. 测试
+   - 单元测试(Vitest)
+   - E2E测试(待添加)
 
-## Development
+## 注意事项
 
-1. Start development server:
-   ```bash
-   pnpm dev
-   ```
-2. The plugin will appear in `Settings > Marketplace > Installed` in SiYuan after you've linked your development plugin directory or copied the built plugin to your SiYuan workspace's `data/plugins/` directory.
-3. Enable the plugin and start developing. The main UI component is typically `src/App.vue` or a view component like `src/views/MainPanel.vue`.
-
-## Build & Release
-
-### Using Github Action
-
-1. Create a version tag (e.g. `v1.0.0`)
-2. Push the tag to trigger automatic release
-
-### Manual Release
-
-1. Build the plugin:
-   ```bash
-   pnpm build
-   ```
-2. Create a new release on GitHub and upload `package.zip`
-
-For first release, submit a PR to [Community Bazaar](https://github.com/siyuan-note/bazaar) to add your repository.
-
-## License
-
-MIT License
+- 遵循思源笔记插件开发规范
+- 保持代码风格统一(ESLint + Prettier)
+- 重要功能需添加详细注释
+- 提交代码前运行测试
+- 更新CHANGELOG.md记录变更
+- 分支管理策略:
+  - main: 稳定版本
+  - dev: 开发分支
+  - feature/*: 功能开发分支

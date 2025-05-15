@@ -1,106 +1,127 @@
-// src/store/newsStore.ts
-import { defineStore } from 'pinia';
-
-/**
- * @file newsStore.ts - 管理新闻数据的状态。
- */
+import { defineStore } from 'pinia'
+import { fetchNews, fetchHotNews, getAvailableSources } from '@/services/newsApi'
+import type { NewsItem } from '@/types/news'
 
 export const useNewsStore = defineStore('news', {
+  // 修改state初始化，确保所有属性都有默认值
   state: () => ({
-    articles: [] as Array<any>, // 明确文章数组类型
-    isLoading: false,
-    error: null as string | null, // 明确错误类型
-    newsSources: [
-      // 默认新闻源列表
-      'https://rsshub.app/bbc/topics/chinese', // BBC中文网
-      'https://rsshub.app/reuters/world/china', // 路透社中国新闻
-      'https://rsshub.app/zaobao/realtime/china', // 联合早报中国新闻
-      'https://rsshub.app/thepaper/featured', // 澎湃新闻
-      'https://rsshub.app/guokr/scientific', // 果壳科学
-      'https://rsshub.app/36kr/newsflashes', // 36氪快讯
-      'https://rsshub.app/zhihu/daily', // 知乎日报
-    ]
+    newsList: [] as NewsItem[],
+    hotNewsList: [] as NewsItem[],
+    sources: [] as string[],
+    loading: false,
+    error: null as string | null,
+    currentPage: 1,
+    hasMore: true,
+    selectedSource: 'v2ex-share',
+    lastUpdated: new Date() as Date | null,
+    name: 'newsStore',
+    initialized: false,
+    // 添加默认新闻项以防止null访问
+    currentNews: {
+      id: '',
+      title: '',
+      summary: '',
+      source: { name: '未知来源' },
+      time: '',
+      url: ''
+    } as NewsItem,
+    // 添加默认name属性防止null访问
+    storeName: 'newsStore'
   }),
+
   actions: {
     /**
-     * 加载新闻数据。
-     * 目前使用模拟数据，后续会替换为真实 API 调用。
+     * 获取新闻列表
+     * @param source 新闻源ID
+     * @param count 获取数量
      */
-    async loadNews() {
-      this.isLoading = true;
-      this.error = null; // 重置错误状态
+    async fetchNews(source: string, count = 10) {
+      this.loading = true
+      this.error = null
       try {
-        // 模拟 API 调用延迟
-        await new Promise(resolve => setTimeout(resolve, 500));
-
-        // 添加更多模拟数据确保组件能渲染
-        this.articles = [
-          {
-            id: '1',
-            title: '虚拟新闻标题 1：今日要闻',
-            source: '虚拟新闻台',
-            publishedAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(), // 30分钟前
-            url: '#article1',
-            summary: '这是第一条虚拟新闻的摘要内容，帮助测试页面布局和组件渲染。'
-          },
-          {
-            id: '2',
-            title: '虚拟新闻标题 2：科技新动态',
-            source: '科技前沿',
-            publishedAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(), // 2小时前
-            url: '#article2',
-            summary: '第二条虚拟新闻，关于最新的科技发展趋势和创新技术。'
-          },
-          {
-            id: '3',
-            title: '虚拟新闻标题 3：本地事件报道',
-            source: '本地快讯',
-            publishedAt: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(), // 5小时前
-            url: '#article3',
-            summary: '关于本地发生的一些重要事件的快速报道，确保信息及时传达。'
-          }
-        ];
-      } catch (err: any) { // 为 err 添加类型
-        this.error = err.message;
+        const news = await fetchNews(source, this.currentPage, count)
+        this.newsList = news
+        this.lastUpdated = new Date()
+      } catch (err) {
+        this.error = '获取新闻列表失败'
+        console.error(err)
       } finally {
-        this.isLoading = false;
+        this.loading = false
       }
     },
-    /**
-     * 添加新的新闻源。
-     * @param {string} url - 新闻源的 URL。
-     */
-    addNewsSource(url: string) {
-      if (url.trim() && !this.newsSources.includes(url.trim())) {
-        this.newsSources.push(url.trim());
-        console.log('SiyuanNewsPlugin: News source added to store:', url.trim());
+    
+    async fetchHotNews(sources: string[], count = 10) {
+      this.loading = true
+      this.error = null
+      try {
+        const hotNews = await getHotNews(sources, count)
+        this.hotNewsList = hotNews
+        this.lastUpdated = new Date()
+      } catch (err) {
+        this.error = '获取热门新闻失败'
+        console.error(err)
+      } finally {
+        this.loading = false
       }
     },
-    /**
-     * 更新指定索引的新闻源。
-     * @param {number} index - 要更新的新闻源的索引。
-     * @param {string} newUrl - 新的新闻源 URL。
-     */
-    updateNewsSource(index: number, newUrl: string) {
-      if (newUrl.trim() && index >= 0 && index < this.newsSources.length) {
-        this.newsSources[index] = newUrl.trim();
-        console.log('SiyuanNewsPlugin: News source updated in store at index', index, 'to:', newUrl.trim());
+    
+    async fetchAvailableSources() {
+      this.loading = true
+      try {
+        this.sources = await getAvailableSources()
+      } catch (err) {
+        console.error('获取新闻源列表失败:', err)
+      } finally {
+        this.loading = false
       }
     },
+
     /**
-     * 删除指定索引的新闻源。
-     * @param {number} index - 要删除的新闻源的索引。
+     * 获取支持的新闻源
      */
-    deleteNewsSource(index: number) {
-      if (index >= 0 && index < this.newsSources.length) {
-        const removedSource = this.newsSources.splice(index, 1);
-        console.log('SiyuanNewsPlugin: News source removed from store:', removedSource);
+    async fetchSources() {
+      this.loading = true
+      this.error = null
+      try {
+        this.sources = await getAvailableSources()
+      } catch (err) {
+        this.error = '获取新闻源失败'
+        console.error(err)
+      } finally {
+        this.loading = false
       }
     }
   },
+
   getters: {
-    getArticles: (state) => state.articles,
-    getIsLoading: (state) => state.isLoading,
-    getError: (state) => state.error
+    /**
+     * 获取当前新闻列表
+     */
+    getNewsList: (state) => state.newsList,
+
+    /**
+     * 获取当前热门新闻列表
+     */
+    getHotNewsList: (state) => state.hotNewsList,
+
+    /**
+     * 获取支持的新闻源
+     */
+    getSources: (state) => state.sources,
+
+    /**
+     * 获取加载状态
+     */
+    isLoading: (state) => state.loading,
+
+    /**
+     * 获取错误信息
+     */
+    getError: (state) => state.error,
+    
+    /**
+     * 获取最后更新时间
+     */
+    getLastUpdated: (state) => state.lastUpdated
   }
-});
+})
